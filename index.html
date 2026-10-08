@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8">
@@ -74,7 +74,7 @@
       to { background-position: 0 -200px; }
     }
 
-    /* Controls Header */
+    /* Top Action Controls */
     .top-controls {
       position: fixed;
       top: 20px;
@@ -258,7 +258,6 @@
       50% { box-shadow: 0 12px 32px rgba(170, 119, 28, 0.65); }
     }
 
-    /* Unfolding Animation Trigger */
     .envelope-3d.open .envelope-top-flap {
       transform: rotateX(180deg);
       z-index: 1;
@@ -323,12 +322,12 @@
       font-weight: 300;
     }
 
-    /* Photo Upload Container */
+    /* Photo Frame Styling */
     .photo-container {
       width: 100%;
-      height: 210px;
+      height: 220px;
       border-radius: 16px;
-      border: 1px dashed var(--accent-gold);
+      border: 1px solid var(--accent-gold);
       background-color: #faf8f5;
       display: flex;
       flex-direction: column;
@@ -337,12 +336,14 @@
       margin: 18px 0;
       overflow: hidden;
       position: relative;
+      box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.1);
     }
 
     .photo-container img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      display: block;
     }
 
     .upload-label {
@@ -356,10 +357,14 @@
       border-radius: 30px;
       background: #ffffff;
       transition: all 0.3s ease;
+      position: absolute;
+      bottom: 12px;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(4px);
     }
 
     .upload-label:hover {
-      background: var(--bg-color);
+      background: #ffffff;
     }
 
     /* Timer Display */
@@ -511,9 +516,9 @@
         <p data-en="Are getting married!" data-ar="يدخلان القفص الذهبي!">Are getting married!</p>
 
         <div class="photo-container" id="photoWrapper">
-          <label for="imgUpload" class="upload-label" id="uploadBtn" data-en="✦ Tap to upload photo" data-ar="✦ اضغط لتحميل صورة">✦ Tap to upload photo</label>
+          <img id="customImg" src="C:\Users\Administrator\Videos\WhatsApp Image 2026-10-09 at 1.22.56 AM.jpeg" alt="Sara and Mohamad">
+          <label for="imgUpload" class="upload-label" id="uploadBtn" data-en="✦ Change Photo" data-ar="✦ تغيير الصورة">✦ Change Photo</label>
           <input type="file" id="imgUpload" accept="image/*" style="display: none;" onchange="loadPhoto(event)">
-          <img id="customImg" style="display:none;" alt="Sara and Mohamad">
         </div>
 
         <div class="timer-container">
@@ -660,11 +665,8 @@
   // Custom Photo Loader
   function loadPhoto(event) {
     const img = document.getElementById('customImg');
-    const label = document.getElementById('uploadBtn');
     if (event.target.files && event.target.files[0]) {
       img.src = URL.createObjectURL(event.target.files[0]);
-      img.style.display = 'block';
-      label.style.display = 'none';
     }
   }
 
