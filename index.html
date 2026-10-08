@@ -516,7 +516,7 @@
         <p data-en="Are getting married!" data-ar="يدخلان القفص الذهبي!">Are getting married!</p>
 
         <div class="photo-container" id="photoWrapper">
-          <img id="customImg" src="wedding.jpeg" alt="Sara and Mohamad">
+          <img id="customImg" src="wedding.jpeg" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'220\' viewBox=\'0 0 400 220\'><rect width=\'100%\' height=\'100%\' fill=\'%23faf8f5\'/><text x=\'50%\' y=\'50%\' font-family=\'serif\' font-size=\'20\' fill=\'%23d4af37\' text-anchor=\'middle\' dominant-baseline=\'middle\'>Sara %26 Mohamad</text></svg>'" alt="Sara and Mohamad">
           <label for="imgUpload" class="upload-label" id="uploadBtn" data-en="✦ Change Photo" data-ar="✦ تغيير الصورة">✦ Change Photo</label>
           <input type="file" id="imgUpload" accept="image/*" style="display: none;" onchange="loadPhoto(event)">
         </div>
@@ -606,6 +606,14 @@
   let isPlaying = false;
   let currentLang = 'en';
 
+  // Restore saved photo from localStorage if available
+  window.addEventListener('DOMContentLoaded', () => {
+    const savedPhoto = localStorage.getItem('weddingInvitationPhoto');
+    if (savedPhoto) {
+      document.getElementById('customImg').src = savedPhoto;
+    }
+  });
+
   // Language Switcher Logic
   function toggleLanguage() {
     currentLang = (currentLang === 'en') ? 'ar' : 'en';
@@ -662,11 +670,20 @@
     nextCard.className = 'card active';
   }
 
-  // Custom Photo Loader
+  // Custom Photo Loader & Permanent Local Storage Save
   function loadPhoto(event) {
     const img = document.getElementById('customImg');
     if (event.target.files && event.target.files[0]) {
-      img.src = URL.createObjectURL(event.target.files[0]);
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        img.src = e.target.result;
+        try {
+          localStorage.setItem('weddingInvitationPhoto', e.target.result);
+        } catch(err) {
+          console.warn("Storage quota exceeded, photo displayed for session only.");
+        }
+      };
+      reader.readAsDataURL(event.target.files[0]);
     }
   }
 
