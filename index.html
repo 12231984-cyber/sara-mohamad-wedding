@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sara & Mohamad — Wedding Invitation</title>
+
+  <!-- Google Fonts for Luxury Elegance & Arabic Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-color: #f6f2eb;
+      --card-bg: #ffffff;
+      --accent-gold: #d4af37;
+      --accent-gold-dark: #aa8628;
+      --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
+      --text-dark: #23201d;
+      --text-muted: #7d756d;
+      --glass-border: rgba(212, 175, 55, 0.3);
+      --envelope-paper: #f4ece1;
+      --envelope-inside: #ede1d1;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-dark);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      overflow-x: hidden;
+      position: relative;
+      perspective: 1500px;
+    }
+
+    body.rtl {
+      font-family: 'Amiri', serif;
+      direction: rtl;
+    }
+
+    /* Ambient Background Particles */
+    .bg-sparkles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background-image: 
+        radial-gradient(2px 2px at 20px 30px, var(--accent-gold), rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 40px 70px, #e6d5b8, rgba(0,0,0,0)),
+        radial-gradient(3px 3px at 80px 120px, var(--accent-gold), rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 150px 180px, #e6d5b8, rgba(0,0,0,0));
+      background-repeat: repeat;
+      background-size: 200px 200px;
+      opacity: 0.35;
+      animation: floatParticles 22s linear infinite;
+      z-index: 1;
+    }
+
+    @keyframes floatParticles {
+      from { background-position: 0 0; }
+      to { background-position: 0 -200px; }
+    }
+
+    /* Controls Header */
+    .top-controls {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      gap: 10px;
+      z-index: 100;
+    }
+
+    body.rtl .top-controls {
+      right: auto;
+      left: 20px;
+    }
+
+    .ctrl-btn {
+      height: 42px;
+      padding: 0 16px;
+      border-radius: 21px;
+      background: #ffffff;
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--accent-gold-dark);
+    }
+
+    .ctrl-btn:hover {
+      transform: scale(1.05);
+      background: #faf8f5;
+    }
+
+    .ctrl-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: var(--accent-gold-dark);
+    }
+
+    /* Container & Stage */
+    .container {
+      width: 100%;
+      max-width: 440px;
+      position: relative;
+      z-index: 10;
+      perspective: 1200px;
+    }
+
+    .card-stage {
+      position: relative;
+      width: 100%;
+      min-height: 610px;
+      transform-style: preserve-3d;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 24px;
+      padding: 38px 26px;
+      box-shadow: 0 20px 45px rgba(44, 40, 37, 0.1);
+      border: 1px solid var(--glass-border);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 610px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      backface-visibility: hidden;
+      transform-style: preserve-3d;
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+    }
+
+    .card.hidden-prev {
+      opacity: 0;
+      transform: rotateY(-180deg) scale(0.9);
+      pointer-events: none;
+    }
+
+    .card.hidden-next {
+      opacity: 0;
+      transform: rotateY(180deg) scale(0.9);
+      pointer-events: none;
+    }
+
+    .card.active {
+      opacity: 1;
+      transform: rotateY(0deg) scale(1);
+      pointer-events: auto;
+    }
+
+    /* 3D Envelope Styles (Page 0) */
+    .envelope-wrapper {
+      width: 100%;
+      height: 280px;
+      margin: 20px 0;
+      perspective: 1000px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .envelope-3d {
+      width: 100%;
+      height: 240px;
+      background-color: var(--envelope-paper);
+      border-radius: 12px;
+      position: relative;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+      border: 1px solid var(--glass-border);
+      transform-style: preserve-3d;
+      transition: transform 0.8s ease;
+    }
+
+    .envelope-top-flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 120px;
+      background-color: var(--envelope-inside);
+      clip-path: polygon(0 0, 50% 100%, 100% 0);
+      transform-origin: top center;
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 5;
+      border-top: 1px solid var(--glass-border);
+    }
+
+    .envelope-pocket {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 150px;
+      background-color: var(--envelope-paper);
+      clip-path: polygon(0 100%, 0 0, 50% 50%, 100% 0, 100% 100%);
+      border-radius: 0 0 12px 12px;
+      z-index: 4;
+    }
+
+    .wax-seal {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background: var(--gold-gradient);
+      position: absolute;
+      top: 85px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 25px rgba(170, 119, 28, 0.45);
+      cursor: pointer;
+      z-index: 10;
+      transition: all 0.4s ease;
+      animation: pulseGlow 2.5s infinite ease-in-out;
+    }
+
+    .wax-seal:hover {
+      transform: translateX(-50%) scale(1.1);
+    }
+
+    .wax-seal span {
+      font-family: 'Cinzel', serif;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 1.05rem;
+      letter-spacing: 2px;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 8px 20px rgba(170, 119, 28, 0.35); }
+      50% { box-shadow: 0 12px 32px rgba(170, 119, 28, 0.65); }
+    }
+
+    /* Unfolding Animation Trigger */
+    .envelope-3d.open .envelope-top-flap {
+      transform: rotateX(180deg);
+      z-index: 1;
+    }
+
+    .envelope-3d.open .wax-seal {
+      opacity: 0;
+      transform: translateX(-50%) scale(0.5);
+      pointer-events: none;
+    }
+
+    /* Typography & Visual Details */
+    .monogram {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem;
+      background: var(--gold-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 6px;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .divider {
+      width: 60px;
+      height: 1.5px;
+      background: var(--gold-gradient);
+      margin: 18px auto;
+      border-radius: 2px;
+    }
+
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.3rem;
+      font-weight: 400;
+      color: var(--text-dark);
+      margin: 12px 0;
+      line-height: 1.2;
+    }
+
+    body.rtl h1 {
+      font-family: 'Amiri', serif;
+      font-size: 2.5rem;
+    }
+
+    h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.45rem;
+      font-weight: 400;
+      color: var(--accent-gold-dark);
+      letter-spacing: 1px;
+    }
+
+    body.rtl h2 {
+      font-family: 'Amiri', serif;
+    }
+
+    p {
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: var(--text-muted);
+      font-weight: 300;
+    }
+
+    /* Photo Upload Container */
+    .photo-container {
+      width: 100%;
+      height: 210px;
+      border-radius: 16px;
+      border: 1px dashed var(--accent-gold);
+      background-color: #faf8f5;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin: 18px 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .photo-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .upload-label {
+      font-size: 0.78rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--accent-gold-dark);
+      cursor: pointer;
+      padding: 10px 20px;
+      border: 1px solid var(--accent-gold);
+      border-radius: 30px;
+      background: #ffffff;
+      transition: all 0.3s ease;
+    }
+
+    .upload-label:hover {
+      background: var(--bg-color);
+    }
+
+    /* Timer Display */
+    .timer-container {
+      display: flex;
+      justify-content: space-between;
+      background: #faf8f5;
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 14px 10px;
+      margin-top: 12px;
+    }
+
+    .timer-box {
+      flex: 1;
+      text-align: center;
+    }
+
+    .timer-val {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: var(--accent-gold-dark);
+      line-height: 1;
+    }
+
+    .timer-lbl {
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Interactive Buttons */
+    .btn {
+      background: var(--gold-gradient);
+      color: #ffffff;
+      border: none;
+      padding: 14px 28px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(170, 119, 28, 0.25);
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(170, 119, 28, 0.35);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--accent-gold-dark);
+      border: 1px solid var(--accent-gold);
+      box-shadow: none;
+    }
+
+    .btn-outline:hover {
+      background: rgba(212, 175, 55, 0.08);
+      box-shadow: none;
+    }
+
+    .nav-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .step-tag {
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--accent-gold-dark);
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-sparkles"></div>
+
+<!-- Ambient Soft Piano Background Music -->
+<audio id="weddingAudio" loop preload="auto">
+  <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=warm-memories-emotional-inspiring-piano-22002.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Language and Audio Switchers -->
+<div class="top-controls">
+  <button class="ctrl-btn" onclick="toggleLanguage()" title="Switch Language">
+    <span id="langBtnText">العربية</span>
+  </button>
+  <button class="ctrl-btn" onclick="toggleAudio()" title="Toggle Music">
+    <svg id="musicIcon" viewBox="0 0 24 24">
+      <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+    </svg>
+  </button>
+</div>
+
+<div class="container">
+  <div class="card-stage">
+
+    <!-- PAGE 0: 3D UNFOLDING ENVELOPE -->
+    <div id="page0" class="card active">
+      <div>
+        <div class="step-tag" data-en="Exclusive Invitation" data-ar="دعوة خاصة">Exclusive Invitation</div>
+        <div class="monogram">S & M</div>
+        <div class="divider"></div>
+        <h1>Sara & Mohamad</h1>
+        <p style="margin-top: 6px;" data-en="You are cordially invited to celebrate our special day." data-ar="نتشرف بدعوتكم لمشاركتنا فرحتنا في هذا اليوم المميز.">
+          You are cordially invited to celebrate our special day.
+        </p>
+
+        <div class="envelope-wrapper">
+          <div class="envelope-3d" id="envelope3d">
+            <div class="envelope-top-flap"></div>
+            <div class="envelope-pocket"></div>
+            <div class="wax-seal" onclick="openEnvelope()">
+              <span>S & M</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <p style="font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-gold-dark); margin-bottom: 8px; font-weight: 500;" data-en="✦ Press Seal To Open ✦" data-ar="✦ اضغط الختم للفتح ✦">
+          ✦ Press Seal To Open ✦
+        </p>
+        <p style="font-style: italic; font-size: 0.8rem; color: var(--text-muted);" data-en="A celebration of eternal love & happiness" data-ar="احتفال بالمحبة والمودة الدائمة">
+          A celebration of eternal love & happiness
+        </p>
+      </div>
+    </div>
+
+    <!-- PAGE 1: PHOTO & COUNTDOWN -->
+    <div id="page1" class="card hidden-next">
+      <div>
+        <div class="step-tag" data-en="Save The Date" data-ar="احفظ التاريخ">Save The Date</div>
+        <div class="monogram">S & M</div>
+        <div class="divider"></div>
+        <h1>Sara & Mohamad</h1>
+        <p data-en="Are getting married!" data-ar="يدخلان القفص الذهبي!">Are getting married!</p>
+
+        <div class="photo-container" id="photoWrapper">
+          <label for="imgUpload" class="upload-label" id="uploadBtn" data-en="✦ Tap to upload photo" data-ar="✦ اضغط لتحميل صورة">✦ Tap to upload photo</label>
+          <input type="file" id="imgUpload" accept="image/*" style="display: none;" onchange="loadPhoto(event)">
+          <img id="customImg" style="display:none;" alt="Sara and Mohamad">
+        </div>
+
+        <div class="timer-container">
+          <div class="timer-box">
+            <div class="timer-val" id="days">00</div>
+            <div class="timer-lbl" data-en="Days" data-ar="أيام">Days</div>
+          </div>
+          <div class="timer-box">
+            <div class="timer-val" id="hours">00</div>
+            <div class="timer-lbl" data-en="Hours" data-ar="ساعات">Hours</div>
+          </div>
+          <div class="timer-box">
+            <div class="timer-val" id="minutes">00</div>
+            <div class="timer-lbl" data-en="Mins" data-ar="دقائق">Mins</div>
+          </div>
+          <div class="timer-box">
+            <div class="timer-val" id="seconds">00</div>
+            <div class="timer-lbl" data-en="Secs" data-ar="ثواني">Secs</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 18px;">
+        <button class="btn" onclick="nextPage(1, 2)" data-en="View Invitation ✦" data-ar="عرض الدعوة ✦">View Invitation ✦</button>
+      </div>
+    </div>
+
+    <!-- PAGE 2: INVITATION ANNOUNCEMENT -->
+    <div id="page2" class="card hidden-next">
+      <div>
+        <div class="step-tag" data-en="Official Invitation" data-ar="الدعوة الرسمية">Official Invitation</div>
+        <div class="monogram">✦</div>
+        <h2 data-en="Together with their families" data-ar="بمباركة الأهل والأقارب">Together with their families</h2>
+        <h1 style="font-size: 2.5rem; margin: 24px 0;">Sara<br><span style="font-size: 1.5rem; font-style: italic; color: var(--accent-gold-dark);">&</span><br>Mohamad</h1>
+        <div class="divider"></div>
+        <p style="padding: 0 10px;" data-en="Request the pleasure of your company as they celebrate their love and unite in marriage." data-ar="يتشرفون بدعوتكم لحضور حفل زفافهما ومشاركتهم أجمل اللحظات.">
+          Request the pleasure of your company as they celebrate their love and unite in marriage.
+        </p>
+      </div>
+
+      <div class="nav-buttons" style="margin-top: 18px;">
+        <button class="btn btn-outline" onclick="nextPage(2, 1)" data-en="Back" data-ar="رجوع">Back</button>
+        <button class="btn" onclick="nextPage(2, 3)" data-en="Venue Details" data-ar="تفاصيل المكان">Venue Details</button>
+      </div>
+    </div>
+
+    <!-- PAGE 3: LOCATION & DETAILS -->
+    <div id="page3" class="card hidden-next">
+      <div>
+        <div class="step-tag" data-en="Wedding Details" data-ar="تفاصيل الزفاف">Wedding Details</div>
+        <div class="divider"></div>
+
+        <p style="letter-spacing: 1.5px; font-weight: 500; font-size: 0.75rem; color: var(--accent-gold-dark);" data-en="DATE & TIME" data-ar="التاريخ والوقت">DATE & TIME</p>
+        <p style="font-family: 'Cormorant Garamond', serif; font-size: 1.35rem; color: var(--text-dark); margin-bottom: 22px;">
+          <span data-en="Saturday, October 17, 2026" data-ar="السبت، ١٧ أكتوبر ٢٠٢٦">Saturday, October 17, 2026</span><br>
+          <span style="font-size: 1.05rem; color: var(--text-muted);" data-en="at 7:00 PM" data-ar="الساعة ٧:٠٠ مساءً">at 7:00 PM</span>
+        </p>
+
+        <p style="letter-spacing: 1.5px; font-weight: 500; font-size: 0.75rem; color: var(--accent-gold-dark);" data-en="LOCATION" data-ar="الموقع">LOCATION</p>
+        <p style="font-family: 'Cormorant Garamond', serif; font-size: 1.35rem; color: var(--text-dark);">
+          <span data-en="Sofia Palace" data-ar="قصر صوفيا (Sofia Palace)">Sofia Palace</span><br>
+          <span style="font-size: 1.05rem; color: var(--text-muted);" data-en="Rmayle, Lebanon" data-ar="الرميلة، لبنان">Rmayle, Lebanon</span>
+        </p>
+
+        <div style="margin-top: 25px; padding: 18px; background: #faf8f5; border-radius: 16px; border: 1px solid var(--glass-border);">
+          <p style="font-style: italic; font-size: 0.85rem; color: var(--text-muted);" data-en="We look forward to sharing this magical evening with you!" data-ar="ننتظر بشوق مشاركتكم هذه الليلة الساحرة!">
+            We look forward to sharing this magical evening with you!
+          </p>
+        </div>
+      </div>
+
+      <div style="margin-top: 18px;">
+        <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px;">
+          <a href="https://maps.google.com/?q=Sofia+Palace+Rmayle" target="_blank" class="btn" style="width: 100%;" data-en="View on Google Maps" data-ar="الموقع على الخريطة">View on Google Maps</a>
+          <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Sara+%26+Mohamad+Wedding&dates=20261017T160000Z/20261017T210000Z&location=Sofia+Palace,+Rmayle" target="_blank" class="btn btn-outline" style="width: 100%;" data-en="Add to Calendar" data-ar="إضافة إلى التقويم">Add to Calendar</a>
+        </div>
+        <button class="btn btn-outline" onclick="nextPage(3, 2)" style="width: 100%;" data-en="Back" data-ar="رجوع">Back</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  let isPlaying = false;
+  let currentLang = 'en';
+
+  // Language Switcher Logic
+  function toggleLanguage() {
+    currentLang = (currentLang === 'en') ? 'ar' : 'en';
+    
+    if (currentLang === 'ar') {
+      document.body.classList.add('rtl');
+      document.documentElement.setAttribute('dir', 'rtl');
+      document.getElementById('langBtnText').innerText = 'English';
+    } else {
+      document.body.classList.remove('rtl');
+      document.documentElement.setAttribute('dir', 'ltr');
+      document.getElementById('langBtnText').innerText = 'العربية';
+    }
+
+    document.querySelectorAll('[data-en]').forEach(el => {
+      const text = el.getAttribute('data-' + currentLang);
+      if (text) {
+        el.innerText = text;
+      }
+    });
+  }
+
+  // 3D Envelope Unfolding Sequence
+  function openEnvelope() {
+    const env = document.getElementById('envelope3d');
+    env.classList.add('open');
+
+    // Play soft background music
+    const audio = document.getElementById('weddingAudio');
+    audio.volume = 0.5;
+    audio.play().then(() => {
+      isPlaying = true;
+    }).catch(() => {
+      isPlaying = false;
+    });
+
+    // Transition to Page 1 after 3D flap opening animation completes
+    setTimeout(() => {
+      nextPage(0, 1);
+    }, 900);
+  }
+
+  // 3D Card Page Switcher
+  function nextPage(current, next) {
+    const curCard = document.getElementById('page' + current);
+    const nextCard = document.getElementById('page' + next);
+
+    if (next > current) {
+      curCard.className = 'card hidden-prev';
+    } else {
+      curCard.className = 'card hidden-next';
+    }
+
+    nextCard.className = 'card active';
+  }
+
+  // Custom Photo Loader
+  function loadPhoto(event) {
+    const img = document.getElementById('customImg');
+    const label = document.getElementById('uploadBtn');
+    if (event.target.files && event.target.files[0]) {
+      img.src = URL.createObjectURL(event.target.files[0]);
+      img.style.display = 'block';
+      label.style.display = 'none';
+    }
+  }
+
+  // Audio Toggle Button
+  function toggleAudio() {
+    const audio = document.getElementById('weddingAudio');
+    if (isPlaying) {
+      audio.pause();
+    } else {
+      audio.play().catch(() => {});
+    }
+    isPlaying = !isPlaying;
+  }
+
+  // Live Countdown Timer
+  const eventDate = new Date('October 17, 2026 19:00:00').getTime();
+
+  function updateCountdown() {
+    const now = new Date().getTime();
+    const diff = eventDate - now;
+
+    if (diff > 0) {
+      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+      document.getElementById('days').innerText = String(d).padStart(2, '0');
+      document.getElementById('hours').innerText = String(h).padStart(2, '0');
+      document.getElementById('minutes').innerText = String(m).padStart(2, '0');
+      document.getElementById('seconds').innerText = String(s).padStart(2, '0');
+    } else {
+      document.getElementById('days').innerText = '00';
+      document.getElementById('hours').innerText = '00';
+      document.getElementById('minutes').innerText = '00';
+      document.getElementById('seconds').innerText = '00';
+    }
+  }
+
+  setInterval(updateCountdown, 1000);
+  updateCountdown();
+</script>
+
+</body>
+</html>
